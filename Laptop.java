@@ -1,9 +1,9 @@
 public class Laptop {
-    private String model;
-    private int ram;
-    private int hdCap;
-    private String os;
-    private String color;
+    String model;
+    int ram;
+    int hdCap;
+    String os;
+    String color;
 
     @Override
     public String toString() {
