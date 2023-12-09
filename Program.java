@@ -38,18 +38,21 @@ public class Program {
                 switch (option) {
                     case "1":  // Весь каталог
                         ShowCatalog(catalog);
-                        System.out.printf("Всего позиций: %d\n\n\n", catalog.size());
                         break;
                     case "2":  // Каталог с фильтрами
                         select = Selection(catalog, filter);
                         ShowFilter(filter);
-                        ShowCatalog(select);
+                        if (select.size() > 0){
+                            System.out.println("Подходящие варианты:");
+                            ShowCatalog(select);
+                        }
+                        else System.out.println("Нет подходящих вариантов.");
                         break;
                     case "3":  // Показать фильтры
                         ShowFilter(filter);
                         break;
                     case "4":  // Настройка фильтров
-                        filter = GetStandart(filter);
+                        filter = UpdateFilter(filter);
                         break;
                     case "5":  // Выход
                         escape = true;
@@ -100,7 +103,7 @@ public class Program {
         return select;
     }
 
-    private static Laptop GetStandart(Laptop standart){
+    private static Laptop UpdateFilter(Laptop standart){
         String option = "";
         String value;
         LinkedList<String> options = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5", "6"));
@@ -111,10 +114,14 @@ public class Program {
                 System.out.println("Некорректный ввод");
                 continue;
             }
-            if (option.equals("6"))
+            if (option.equals("6")){
+                System.out.println();
                 break;
+            }
+            
             System.out.println("Введите значение: ");
             value = sc.nextLine();
+            System.out.println();
 
             switch (option) {
                 case "1":
@@ -146,7 +153,7 @@ public class Program {
         for (Laptop laptop : catalog) {
             System.out.println(laptop);
         }
-        System.out.println();
+        System.out.printf("\nВсего позиций: %d\n\n\n", catalog.size());
     }
 
     private static void SelectionMenu(){
