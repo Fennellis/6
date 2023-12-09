@@ -23,7 +23,7 @@ public class Program {
 
 
     public static void main(String[] args) {
-        HashSet<Laptop> catalog = CreateRandomSet(100);  // Исходный (случайный) каталог
+        HashSet<Laptop> catalog = CreateRandomSet(100);  // Исходный (случайный) каталог, maxAmount - максимальный размер (потому что).
         HashSet<Laptop> select;  // Каталог с фильтрами
         Laptop filter = new Laptop();
 
@@ -65,7 +65,7 @@ public class Program {
         }
     }
 
-    private static HashSet<Laptop> CreateRandomSet(int n){
+    private static HashSet<Laptop> CreateRandomSet(int maxAmount){
         ArrayList<String> manufactur = new ArrayList<>(Arrays.asList("ASUS", "HP", "Lenovo", "MSI", "Apple"));
         ArrayList<Integer> ram = new ArrayList<>(Arrays.asList(8, 16, 32));
         ArrayList<Integer> hdCap = new ArrayList<>(Arrays.asList(256, 512, 1024, 2048));
@@ -74,7 +74,7 @@ public class Program {
 
         Random rnd = new Random();
         HashSet<Laptop> laptops = new HashSet<>();
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < maxAmount; i++) {
             Laptop current = new Laptop();
             current.setManufacturer(manufactur.get(rnd.nextInt(manufactur.size())));
             current.setRAM(ram.get(rnd.nextInt(ram.size())));
@@ -94,9 +94,9 @@ public class Program {
         HashSet<Laptop> select = new HashSet<>();
         for (Laptop laptop : set) {
             if (laptop.getRAM() >= standart.getRAM() && laptop.getHDCap() >= standart.getHDCap() && 
-                (laptop.getColor().equals(standart.getColor()) || standart.getColor() == null) &&
-                (laptop.getOS().equals(standart.getOS()) || standart.getOS() == null) && 
-                (laptop.getManufacturer().equals(standart.getManufacturer()) || standart.getManufacturer() == null))
+                (standart.getColor() == null || laptop.getColor().toLowerCase().equals(standart.getColor().toLowerCase())) &&
+                (standart.getOS() == null || laptop.getOS().toLowerCase().equals(standart.getOS().toLowerCase())) && 
+                (standart.getManufacturer() == null || laptop.getManufacturer().toLowerCase().equals(standart.getManufacturer().toLowerCase())))
                     select.add(laptop);
         }
 
@@ -106,9 +106,9 @@ public class Program {
     private static Laptop UpdateFilter(Laptop standart){
         String option = "";
         String value;
-        LinkedList<String> options = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5", "6"));
+        LinkedList<String> options = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5", "6", "7"));
         while (true) {
-            SelectionMenu();
+            FilterMenu();
             option = sc.nextLine();
             if (!options.contains(option)){
                 System.out.println("Некорректный ввод");
@@ -116,6 +116,11 @@ public class Program {
             }
             if (option.equals("6")){
                 System.out.println();
+                break;
+            }
+            if (option.equals("7")){
+                System.out.println();
+                standart = new Laptop();
                 break;
             }
             
@@ -156,7 +161,7 @@ public class Program {
         System.out.printf("\nВсего позиций: %d\n\n\n", catalog.size());
     }
 
-    private static void SelectionMenu(){
+    private static void FilterMenu(){
         System.out.println("Выберите параметр:");
         System.out.println("1 - Производитель");
         System.out.println("2 - ОЗУ");
@@ -164,6 +169,7 @@ public class Program {
         System.out.println("4 - Операционная система");
         System.out.println("5 - Цвет");
         System.out.println("6 - Применить фильтры");
+        System.out.println("7 - Сбросить фильтры");
         System.out.print("-> ");
     }
 
