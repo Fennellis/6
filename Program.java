@@ -19,13 +19,14 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Program {
+    private static Scanner sc = new Scanner(System.in);
+
 
     public static void main(String[] args) {
-        HashSet<Laptop> catalog = CreateRandomSet(100);
-        HashSet<Laptop> select;
+        HashSet<Laptop> catalog = CreateRandomSet(100);  // Исходный (случайный) каталог
+        HashSet<Laptop> select;  // Каталог с фильтрами
         Laptop filter = new Laptop();
 
-        Scanner sc = new Scanner(System.in);
         String option;
         LinkedList<String> options = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5"));
         boolean escape = false;
@@ -36,22 +37,19 @@ public class Program {
             if (options.contains(option)) {
                 switch (option) {
                     case "1":  // Весь каталог
-                        for (Laptop laptop : catalog) {
-                            System.out.println(laptop);
-                        }
-                        System.out.printf("\nВсего позиций: %d\n\n\n", catalog.size());
+                        ShowCatalog(catalog);
+                        System.out.printf("Всего позиций: %d\n\n\n", catalog.size());
                         break;
-                    case "2":  // Каталог с фильтрами (ИСПРАВИТЬ БАГИ)
+                    case "2":  // Каталог с фильтрами
                         select = Selection(catalog, filter);
-                        for (Laptop laptop : select) {
-                            System.out.println(laptop);
-                        }
+                        ShowFilter(filter);
+                        ShowCatalog(select);
                         break;
                     case "3":  // Показать фильтры
-                        System.out.println("Текущие фильтры:\n" + filter.toString() + "\n");
+                        ShowFilter(filter);
                         break;
                     case "4":  // Настройка фильтров
-                        filter = GetStandart();
+                        filter = GetStandart(filter);
                         break;
                     case "5":  // Выход
                         escape = true;
@@ -59,7 +57,7 @@ public class Program {
                 }
             }
             else{
-                System.out.println("Некорректный ввод команды. Повторите попытку.");
+                System.out.println("Некорректный ввод команды. Повторите попытку.\n");
             }
         }
     }
@@ -90,7 +88,6 @@ public class Program {
     }
 
     private static HashSet<Laptop> Selection(HashSet<Laptop> set, Laptop standart){
-        System.out.println(standart.toString());
         HashSet<Laptop> select = new HashSet<>();
         for (Laptop laptop : set) {
             if (laptop.getRAM() >= standart.getRAM() && laptop.getHDCap() >= standart.getHDCap() && 
@@ -103,12 +100,10 @@ public class Program {
         return select;
     }
 
-    private static Laptop GetStandart(){
-        Scanner sc = new Scanner(System.in);
+    private static Laptop GetStandart(Laptop standart){
         String option = "";
         String value;
         LinkedList<String> options = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5", "6"));
-        Laptop standart = new Laptop();
         while (true) {
             SelectionMenu();
             option = sc.nextLine();
@@ -141,6 +136,17 @@ public class Program {
         }
         
         return standart;
+    }
+
+    private static void ShowFilter(Laptop filter){
+        System.out.println("Текущие фильтры:\n" + filter.toString() + "\n");
+    }
+
+    private static void ShowCatalog(HashSet<Laptop> catalog){
+        for (Laptop laptop : catalog) {
+            System.out.println(laptop);
+        }
+        System.out.println();
     }
 
     private static void SelectionMenu(){
