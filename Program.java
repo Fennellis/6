@@ -151,7 +151,9 @@ public class Program {
     }
 
     private static void ShowFilter(Laptop filter){
-        System.out.println("Текущие фильтры:\n" + filter.toString() + "\n");
+        if (filter.getManufacturer() == null && filter.getRAM() == 0 && filter.getHDCap() == 0 && filter.getOS() == null && filter.getColor() == null)
+            System.out.println("Фильтры не установлены.\n");
+        else System.out.println("Текущие фильтры:\n" + filter.toString() + "\n");
     }
 
     private static void ShowCatalog(HashSet<Laptop> catalog){
