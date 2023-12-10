@@ -127,7 +127,7 @@ public class Program {
         if (!temp.equals(""))
             newLaptop.setColor(temp);
 
-        if (!catalog.contains(newLaptop)){
+        if (!catalog.contains(newLaptop) && !newLaptop.isEmpty()){
             catalog.add(newLaptop);
             System.out.println("Успешно добавлено.\n");
         }
@@ -191,12 +191,18 @@ public class Program {
                 case "2":
                     if (TryParseInt(value) != null)
                         standart.setRAM(value);
-                    else System.out.println("Некорректное значение");
+                    else {
+                        System.out.println("Некорректное значение. Нажмите Enter для продолжения");
+                        sc.nextLine();
+                    }
                     break;
                 case "3":
                     if (TryParseInt(value) != null)
                         standart.setHDCap(value);
-                    else System.out.println("Некорректное значение");
+                    else {
+                        System.out.println("Некорректное значение. Нажмите Enter для продолжения");
+                        sc.nextLine();
+                    }
                     break;
                 case "4":
                     standart.setOS(value);
@@ -211,8 +217,7 @@ public class Program {
     }
 
     private static void ShowFilter(Laptop filter){
-        if (filter.getManufacturer().equals("N/A") && filter.getRAM().equals("N/A") &&
-            filter.getHDCap().equals("N/A") && filter.getOS().equals("N/A") && filter.getColor().equals("N/A"))
+        if (filter.isEmpty())
             System.out.println("Фильтры не установлены.\n");
         else System.out.println("Текущие фильтры:\n" + filter.toString() + "\n");
     }

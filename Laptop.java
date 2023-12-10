@@ -45,7 +45,10 @@ public class Laptop {
         return color;
     }
 
-
+    public boolean isEmpty(){
+        return (manufacturer.equals("N/A") && ram.equals("N/A") && hdCap.equals("N/A") &&
+                os.equals("N/A") && color.equals("N/A"));
+    }
 
     @Override
     public String toString() {
