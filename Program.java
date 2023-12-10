@@ -23,7 +23,7 @@ public class Program {
 
 
     public static void main(String[] args) {
-        HashSet<Laptop> catalog = CreateRandomSet(20);  // Исходный (случайный) каталог, maxAmount - максимальный, но не гарантированный размер (почему? потому что).
+        HashSet<Laptop> catalog = StartCatalog();
         HashSet<Laptop> select;  // Каталог с фильтрами
         Laptop filter = new Laptop();
 
@@ -250,5 +250,32 @@ public class Program {
         System.out.println("5. Настройка фильтров.");
         System.out.println("6. Выход\n");
         System.out.print("Введите номер опции -> ");
+    }
+
+    private static HashSet<Laptop> StartCatalog(){
+        HashSet<Laptop> catalog = new HashSet<>();
+
+        System.out.print("Желаете создать случайный каталог? (y/n): ");
+        String option;
+        boolean stupid = true;
+        while (stupid) {
+            option = sc.nextLine().toLowerCase();
+            switch (option) {
+                case "y":
+                    System.out.print("Введите максимальный размер: ");
+                    int size = sc.nextInt();
+                    catalog = CreateRandomSet(size);
+                    stupid = false;
+                    break;
+                case "n":
+                    stupid = false;
+                    break;
+                default:
+                    System.out.print("Попробуйте еще раз: ");
+                    break;
+            }
+        }
+        System.out.print("\033[H\033[J");
+        return catalog;
     }
 }
