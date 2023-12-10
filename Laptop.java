@@ -1,9 +1,9 @@
 public class Laptop {
-    private String manufacturer;
+    private String manufacturer = "N/A";
     private int ram;
     private int hdCap;
-    private String os;
-    private String color;
+    private String os = "N/A";
+    private String color = "N/A";
 
     public void setManufacturer(String manufacturer){
         this.manufacturer = manufacturer;
@@ -44,6 +44,7 @@ public class Laptop {
     public String getColor(){
         return color;
     }
+
 
 
     @Override

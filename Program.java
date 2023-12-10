@@ -23,23 +23,26 @@ public class Program {
 
 
     public static void main(String[] args) {
-        HashSet<Laptop> catalog = CreateRandomSet(100);  // Исходный (случайный) каталог, maxAmount - максимальный размер (потому что).
+        HashSet<Laptop> catalog = CreateRandomSet(20);  // Исходный (случайный) каталог, maxAmount - максимальный, но не гарантированный размер (почему? потому что).
         HashSet<Laptop> select;  // Каталог с фильтрами
         Laptop filter = new Laptop();
 
         String option;
-        LinkedList<String> options = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5"));
+        LinkedList<String> options = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5", "6"));
         boolean escape = false;
         while (!escape) {
             MainMenu();
             option = sc.nextLine();
-            System.out.println();
+            System.out.print("\033[H\033[J");
             if (options.contains(option)) {
                 switch (option) {
                     case "1":  // Весь каталог
                         ShowCatalog(catalog);
                         break;
-                    case "2":  // Каталог с фильтрами
+                    case "2":  // Показать фильтры
+                        catalog = AddProduct(catalog);
+                        break;
+                    case "3":  // Каталог с фильтрами
                         select = Selection(catalog, filter);
                         ShowFilter(filter);
                         if (select.size() > 0){
@@ -48,13 +51,13 @@ public class Program {
                         }
                         else System.out.println("Нет подходящих вариантов.");
                         break;
-                    case "3":  // Показать фильтры
+                    case "4":  // Показать фильтры
                         ShowFilter(filter);
                         break;
-                    case "4":  // Настройка фильтров
+                    case "5":  // Настройка фильтров
                         filter = UpdateFilter(filter);
                         break;
-                    case "5":  // Выход
+                    case "6":  // Выход
                         escape = true;
                         break;
                 }
@@ -66,11 +69,11 @@ public class Program {
     }
 
     private static HashSet<Laptop> CreateRandomSet(int maxAmount){
-        ArrayList<String> manufactur = new ArrayList<>(Arrays.asList("ASUS", "HP", "Lenovo", "MSI", "Apple"));
+        ArrayList<String> manufactur = new ArrayList<>(Arrays.asList("ASUS", "HP", "LENOVO", "MSI", "APPLE"));
         ArrayList<Integer> ram = new ArrayList<>(Arrays.asList(8, 16, 32));
         ArrayList<Integer> hdCap = new ArrayList<>(Arrays.asList(256, 512, 1024, 2048));
-        ArrayList<String> os = new ArrayList<>(Arrays.asList("Linux", "Windows"));
-        ArrayList<String> color = new ArrayList<>(Arrays.asList("Black", "White", "Gold", "Pink", "Gray"));
+        ArrayList<String> os = new ArrayList<>(Arrays.asList("LINUX", "WINDOWS"));
+        ArrayList<String> color = new ArrayList<>(Arrays.asList("BLACK", "WHITE", "GOLD", "PINK", "GRAY"));
 
         Random rnd = new Random();
         HashSet<Laptop> laptops = new HashSet<>();
@@ -90,13 +93,64 @@ public class Program {
         return laptops;
     }
 
+    private static HashSet<Laptop> AddProduct(HashSet<Laptop> catalog){
+        Laptop newLaptop = new Laptop();
+        String temp;
+
+        System.out.println("Введите наименование производителя");
+        System.out.print("-> ");
+        temp = sc.nextLine().toUpperCase();
+        if (!temp.equals(""))
+            newLaptop.setManufacturer(temp);
+
+        System.out.println("Введите объем ОЗУ");
+        System.out.print("-> ");
+        temp = sc.nextLine();
+        if (TryParseInt(temp) != null)
+            newLaptop.setRAM(Integer.parseInt(temp));
+
+        System.out.println("Введите объем ЖД");
+        System.out.print("-> ");
+        temp = sc.nextLine();
+        if (TryParseInt(temp) != null)
+            newLaptop.setHDCap((Integer.parseInt(temp)));
+        
+        System.out.println("Введите наименование ОС");
+        System.out.print("-> ");
+        temp = sc.nextLine().toUpperCase();
+        if (!temp.equals(""))
+            newLaptop.setOS(temp);
+
+        System.out.println("Введите цвет");
+        System.out.print("-> ");
+        temp = sc.nextLine().toUpperCase();
+        if (!temp.equals(""))
+            newLaptop.setColor(temp);
+
+        if (!catalog.contains(newLaptop)){
+            catalog.add(newLaptop);
+            System.out.println("Успешно добавлено.\n");
+        }
+        else System.out.println("Продукт с указанными характеристиками уже имеется.\n");
+
+        return catalog;
+    }
+
+    static Integer TryParseInt(String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     private static HashSet<Laptop> Selection(HashSet<Laptop> set, Laptop standart){
         HashSet<Laptop> select = new HashSet<>();
         for (Laptop laptop : set) {
             if (laptop.getRAM() >= standart.getRAM() && laptop.getHDCap() >= standart.getHDCap() && 
-                (standart.getColor() == null || laptop.getColor().toLowerCase().equals(standart.getColor().toLowerCase())) &&
-                (standart.getOS() == null || laptop.getOS().toLowerCase().equals(standart.getOS().toLowerCase())) && 
-                (standart.getManufacturer() == null || laptop.getManufacturer().toLowerCase().equals(standart.getManufacturer().toLowerCase())))
+                (standart.getColor().equals("N/A") || laptop.getColor().equals(standart.getColor().toUpperCase())) &&
+                (standart.getOS().equals("N/A") || laptop.getOS().equals(standart.getOS().toUpperCase())) && 
+                (standart.getManufacturer().equals("N/A") || laptop.getManufacturer().equals(standart.getManufacturer().toUpperCase())))
                     select.add(laptop);
         }
 
@@ -108,6 +162,7 @@ public class Program {
         String value;
         LinkedList<String> options = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5", "6", "7"));
         while (true) {
+            System.out.print("\033[H\033[J");
             FilterMenu();
             option = sc.nextLine();
             if (!options.contains(option)){
@@ -115,11 +170,11 @@ public class Program {
                 continue;
             }
             if (option.equals("6")){
-                System.out.println();
+                System.out.print("\033[H\033[J");
                 break;
             }
             if (option.equals("7")){
-                System.out.println();
+                System.out.print("\033[H\033[J");
                 standart = new Laptop();
                 break;
             }
@@ -151,7 +206,7 @@ public class Program {
     }
 
     private static void ShowFilter(Laptop filter){
-        if (filter.getManufacturer() == null && filter.getRAM() == 0 && filter.getHDCap() == 0 && filter.getOS() == null && filter.getColor() == null)
+        if (filter.getManufacturer().equals("N/A") && filter.getRAM() == 0 && filter.getHDCap() == 0 && filter.getOS().equals("N/A") && filter.getColor().equals("N/A"))
             System.out.println("Фильтры не установлены.\n");
         else System.out.println("Текущие фильтры:\n" + filter.toString() + "\n");
     }
@@ -178,10 +233,11 @@ public class Program {
     private static void MainMenu(){
         System.out.println("Главное меню.");
         System.out.println("1. Показать весь каталог.");
-        System.out.println("2. Показать каталог с фильрами.");
-        System.out.println("3. Показать текущие фильтры.");
-        System.out.println("4. Настройка фильтров.");
-        System.out.println("5. Выход\n");
+        System.out.println("2. Добавить новый товар в каталог.");
+        System.out.println("3. Показать каталог с фильрами.");
+        System.out.println("4. Показать текущие фильтры.");
+        System.out.println("5. Настройка фильтров.");
+        System.out.println("6. Выход\n");
         System.out.print("Введите номер опции -> ");
     }
 }
