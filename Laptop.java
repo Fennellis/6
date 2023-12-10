@@ -1,7 +1,7 @@
 public class Laptop {
     private String manufacturer = "N/A";
-    private int ram;
-    private int hdCap;
+    private String ram = "N/A";
+    private String hdCap = "N/A";
     private String os = "N/A";
     private String color = "N/A";
 
@@ -9,11 +9,11 @@ public class Laptop {
         this.manufacturer = manufacturer;
     }
 
-    public void setRAM(int ram){
+    public void setRAM(String ram){
         this.ram = ram;
     }
 
-    public void setHDCap(int hdCap){
+    public void setHDCap(String hdCap){
         this.hdCap = hdCap;
     }
 
@@ -29,11 +29,11 @@ public class Laptop {
         return manufacturer;
     }
 
-    public int getRAM(){
+    public String getRAM(){
         return ram;
     }
 
-    public int getHDCap(){
+    public String getHDCap(){
         return hdCap;
     }
 
@@ -49,7 +49,7 @@ public class Laptop {
 
     @Override
     public String toString() {
-        return String.format("Manuf: %10s   RAM: %2d GB   HDCap: %5d GB   OS: %10s   Color: %10s", manufacturer, ram, hdCap, os, color);
+        return String.format("Manuf: %10s   RAM: %2s GB   HDCap: %5s GB   OS: %10s   Color: %10s", manufacturer, ram, hdCap, os, color);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class Laptop {
             return true;
         if (obj instanceof Laptop){
             Laptop laptop = (Laptop) obj;
-            return manufacturer.equals(laptop.manufacturer) && ram == laptop.ram && hdCap == laptop.hdCap &&
+            return manufacturer.equals(laptop.manufacturer) && ram.equals(laptop.ram) && hdCap.equals(laptop.hdCap) &&
             os.equals(laptop.os) && color.equals(laptop.color);
         }
 
@@ -66,6 +66,6 @@ public class Laptop {
     }
     @Override
     public int hashCode() {
-        return manufacturer.hashCode() + 5*ram + 7*hdCap + 11*os.hashCode() + 13*color.hashCode();
+        return 3*manufacturer.hashCode() + 5*ram.hashCode() + 7*hdCap.hashCode() + 11*os.hashCode() + 13*color.hashCode();
     }
 }

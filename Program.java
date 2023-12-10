@@ -80,8 +80,8 @@ public class Program {
         for (int i = 0; i < maxAmount; i++) {
             Laptop current = new Laptop();
             current.setManufacturer(manufactur.get(rnd.nextInt(manufactur.size())));
-            current.setRAM(ram.get(rnd.nextInt(ram.size())));
-            current.setHDCap(hdCap.get(rnd.nextInt(hdCap.size())));
+            current.setRAM(ram.get(rnd.nextInt(ram.size())).toString());
+            current.setHDCap(hdCap.get(rnd.nextInt(hdCap.size())).toString());
             if(current.getManufacturer().equals("Apple"))
                 current.setOS("IOS");
             else
@@ -107,13 +107,13 @@ public class Program {
         System.out.print("-> ");
         temp = sc.nextLine();
         if (TryParseInt(temp) != null)
-            newLaptop.setRAM(Integer.parseInt(temp));
+            newLaptop.setRAM(temp);
 
         System.out.println("Введите объем ЖД");
         System.out.print("-> ");
         temp = sc.nextLine();
         if (TryParseInt(temp) != null)
-            newLaptop.setHDCap((Integer.parseInt(temp)));
+            newLaptop.setHDCap(temp);
         
         System.out.println("Введите наименование ОС");
         System.out.print("-> ");
@@ -147,7 +147,8 @@ public class Program {
     private static HashSet<Laptop> Selection(HashSet<Laptop> set, Laptop standart){
         HashSet<Laptop> select = new HashSet<>();
         for (Laptop laptop : set) {
-            if (laptop.getRAM() >= standart.getRAM() && laptop.getHDCap() >= standart.getHDCap() && 
+            if ((standart.getRAM().equals("N/A") || Integer.parseInt(laptop.getRAM()) >= Integer.parseInt(standart.getRAM())) &&
+                (standart.getHDCap().equals("N/A") || Integer.parseInt(laptop.getHDCap()) >= Integer.parseInt(standart.getHDCap())) && 
                 (standart.getColor().equals("N/A") || laptop.getColor().equals(standart.getColor().toUpperCase())) &&
                 (standart.getOS().equals("N/A") || laptop.getOS().equals(standart.getOS().toUpperCase())) && 
                 (standart.getManufacturer().equals("N/A") || laptop.getManufacturer().equals(standart.getManufacturer().toUpperCase())))
@@ -188,10 +189,14 @@ public class Program {
                     standart.setManufacturer(value);
                     break;
                 case "2":
-                    standart.setRAM(Integer.parseInt(value));
+                    if (TryParseInt(value) != null)
+                        standart.setRAM(value);
+                    else System.out.println("Некорректное значение");
                     break;
                 case "3":
-                    standart.setHDCap(Integer.parseInt(value));
+                    if (TryParseInt(value) != null)
+                        standart.setHDCap(value);
+                    else System.out.println("Некорректное значение");
                     break;
                 case "4":
                     standart.setOS(value);
@@ -206,7 +211,8 @@ public class Program {
     }
 
     private static void ShowFilter(Laptop filter){
-        if (filter.getManufacturer().equals("N/A") && filter.getRAM() == 0 && filter.getHDCap() == 0 && filter.getOS().equals("N/A") && filter.getColor().equals("N/A"))
+        if (filter.getManufacturer().equals("N/A") && filter.getRAM().equals("N/A") &&
+            filter.getHDCap().equals("N/A") && filter.getOS().equals("N/A") && filter.getColor().equals("N/A"))
             System.out.println("Фильтры не установлены.\n");
         else System.out.println("Текущие фильтры:\n" + filter.toString() + "\n");
     }
