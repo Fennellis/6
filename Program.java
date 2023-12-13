@@ -82,7 +82,7 @@ public class Program {
             current.setManufacturer(manufactur.get(rnd.nextInt(manufactur.size())));
             current.setRAM(ram.get(rnd.nextInt(ram.size())).toString());
             current.setHDCap(hdCap.get(rnd.nextInt(hdCap.size())).toString());
-            if(current.getManufacturer().equals("Apple"))
+            if(current.getManufacturer().equals("APPLE"))
                 current.setOS("IOS");
             else
                 current.setOS(os.get(rnd.nextInt(os.size())));
@@ -115,11 +115,15 @@ public class Program {
         if (TryParseInt(temp) != null)
             newLaptop.setHDCap(temp);
         
-        System.out.println("Введите наименование ОС");
-        System.out.print("-> ");
-        temp = sc.nextLine().toUpperCase();
-        if (!temp.equals(""))
-            newLaptop.setOS(temp);
+        if (!newLaptop.getManufacturer().equals("APPLE")){
+            System.out.println("Введите наименование ОС");
+            System.out.print("-> ");
+            temp = sc.nextLine().toUpperCase();
+            if (!temp.equals(""))
+                newLaptop.setOS(temp);
+        }
+        else newLaptop.setOS("IOS");
+        
 
         System.out.println("Введите цвет");
         System.out.print("-> ");
